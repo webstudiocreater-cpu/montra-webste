@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MONTRA WEB DESIGN — Independent Web Design Studio</title>
+<meta name="description" content="MONTRA WEB DESIGN is an independent web design studio. Modern, professional websites designed to help businesses establish their online presence.">
+<meta name="theme-color" content="#080808">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23080808'/%3E%3Cpath d='M12 48V16h6l14 20 14-20h6v32h-6V27L32 46 18 27v21z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script>document.documentElement.className = 'js';</script>
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --bg:#080808; --bg2:#111111; --card:#171717; --white:#ffffff; --muted:#a0a0a0; --line:#292929;
+  --ease:cubic-bezier(.22,.8,.24,1);
+  --wrap:1320px; --gut:clamp(20px,4vw,56px);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:84px;-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg);color:var(--white);
+  font-family:"Inter","Geist",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+body.lock{overflow:hidden}
+a{color:inherit;text-decoration:none}
+button,input,textarea{font:inherit;color:inherit}
+ul{list-style:none}
+::selection{background:#fff;color:#080808}
+:focus-visible{outline:2px solid #fff;outline-offset:3px;border-radius:4px}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 var(--gut)}
+.skip{position:absolute;left:-999px;top:8px;background:#fff;color:#000;padding:10px 16px;z-index:200;border-radius:6px}
+.skip:focus{left:8px}
+
+.label{font-size:.72rem;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);display:inline-flex;align-items:center;gap:14px}
+.label::before{content:"";width:32px;height:1px;background:var(--muted)}
+.display{font-weight:700;text-transform:uppercase;letter-spacing:-.045em;line-height:.95}
+
+/* reveal */
+.js .reveal{opacity:0;transform:translateY(28px);transition:opacity .9s var(--ease),transform .9s var(--ease);transition-delay:var(--d,0s)}
+.js .reveal.in{opacity:1;transform:none}
+
+/* buttons */
+.btn{
+  display:inline-flex;align-items:center;gap:12px;padding:16px 28px;border-radius:999px;
+  font-size:.78rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  border:1px solid var(--white);cursor:pointer;position:relative;overflow:hidden;
+  transition:color .4s var(--ease),background .4s var(--ease),border-color .4s var(--ease);
+}
+.btn svg{width:16px;height:16px;transition:transform .4s var(--ease)}
+.btn:hover svg{transform:translateX(5px)}
+.btn-solid{background:var(--white);color:#080808}
+.btn-solid:hover{background:transparent;color:var(--white)}
+.btn-ghost{background:transparent;color:var(--white);border-color:#444}
+.btn-ghost:hover{border-color:var(--white);background:var(--white);color:#080808}
+
+/* ============ NAV ============ */
+.nav{position:fixed;inset:0 0 auto 0;z-index:100;transition:background .4s,border-color .4s,backdrop-filter .4s;border-bottom:1px solid transparent}
+.nav.scrolled{background:rgba(8,8,8,.78);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-color:var(--line)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:76px}
+.logo{display:flex;flex-direction:column;line-height:1;gap:6px}
+.logo b{font-size:1.35rem;font-weight:800;letter-spacing:.18em}
+.logo small{font-size:.54rem;letter-spacing:.42em;color:var(--muted);font-weight:500}
+.nav-links{display:flex;align-items:center;gap:38px}
+.nav-links a.lnk{font-size:.8rem;font-weight:500;color:var(--muted);position:relative;padding:6px 0;transition:color .3s}
+.nav-links a.lnk::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;background:#fff;transform:scaleX(0);transform-origin:right;transition:transform .45s var(--ease)}
+.nav-links a.lnk:hover,.nav-links a.lnk.active{color:#fff}
+.nav-links a.lnk:hover::after,.nav-links a.lnk.active::after{transform:scaleX(1);transform-origin:left}
+.nav .btn{padding:12px 22px;font-size:.68rem}
+.burger{display:none;width:44px;height:44px;background:none;border:1px solid var(--line);border-radius:50%;cursor:pointer;position:relative;z-index:120}
+.burger span{position:absolute;left:13px;right:13px;height:1px;background:#fff;transition:transform .4s var(--ease),top .4s var(--ease),opacity .3s}
+.burger span:nth-child(1){top:18px}.burger span:nth-child(2){top:25px}
+.burger[aria-expanded="true"] span:nth-child(1){top:21px;transform:rotate(45deg)}
+.burger[aria-expanded="true"] span:nth-child(2){top:21px;transform:rotate(-45deg)}
+.mmenu{position:fixed;inset:0;background:var(--bg);z-index:110;display:flex;flex-direction:column;justify-content:center;padding:100px var(--gut) 40px;
+  clip-path:circle(0% at calc(100% - 44px) 38px);transition:clip-path .8s var(--ease);visibility:hidden}
+.mmenu.open{clip-path:circle(150% at calc(100% - 44px) 38px);visibility:visible}
+.mmenu a.m{display:block;font-size:clamp(2.2rem,11vw,3.4rem);font-weight:700;letter-spacing:-.04em;text-transform:uppercase;line-height:1.15;padding:6px 0;border-bottom:1px solid var(--line);color:#fff}
+.mmenu a.m small{font-size:.7rem;color:var(--muted);letter-spacing:.2em;margin-right:14px;vertical-align:middle;font-weight:500}
+.mmenu .btn{margin-top:36px;justify-content:center}
+
+/* ============ HERO ============ */
+.hero{padding:clamp(130px,17vh,190px) 0 clamp(70px,10vw,130px);position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:120px 120px;opacity:.22;mask-image:radial-gradient(ellipse 70% 60% at 50% 30%,#000,transparent 80%);-webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 30%,#000,transparent 80%);pointer-events:none}
+.hero .wrap{position:relative}
+.hero h1{font-size:clamp(2.2rem,6.4vw,7rem);margin:28px 0 0;max-width:15.5em}
+.hero h1 .dim{color:#5a5a5a}
+.hero-sub{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(30px,5vw,90px);margin-top:clamp(44px,6vw,80px);align-items:end}
+.hero-copy p{color:var(--muted);font-size:clamp(1rem,1.2vw,1.12rem);max-width:30em;margin-bottom:36px}
+.hero-btns{display:flex;flex-wrap:wrap;gap:14px}
+.hero-meta{display:flex;gap:34px;margin-top:56px;padding-top:24px;border-top:1px solid var(--line);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.hero-meta b{display:block;color:#fff;font-weight:600;letter-spacing:.1em;margin-bottom:2px}
+
+/* Browser mockup */
+.browser{background:#0e0e0e;border:1px solid #2c2c2c;border-radius:14px;overflow:hidden;box-shadow:0 50px 120px -40px #000,0 0 0 1px rgba(255,255,255,.02)}
+.bar{display:flex;align-items:center;gap:7px;padding:10px 14px;background:#151515;border-bottom:1px solid #262626}
+.bar i{width:8px;height:8px;border-radius:50%;background:#333}
+.bar .url{margin-left:14px;flex:1;max-width:260px;height:20px;border-radius:10px;background:#0c0c0c;border:1px solid #262626;font-size:.58rem;color:#6a6a6a;display:flex;align-items:center;padding:0 12px;letter-spacing:.04em;font-style:normal}
+.screen{container-type:inline-size;position:relative;overflow:hidden;aspect-ratio:16/10}
+.s-in{font-size:1.4vw;font-size:2cqw;height:100%;display:flex;flex-direction:column;line-height:1.35}
+.hero-visual{position:relative;perspective:1600px;padding-bottom:6%}
+.hv-inner{transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .5s var(--ease);transform-style:preserve-3d;position:relative}
+.hv-inner::before{content:"";position:absolute;inset:0;border:1px solid #2a2a2a;border-radius:14px;transform:translate(22px,-22px);z-index:0}
+.hv-inner .browser{position:relative;z-index:1}
+.phone{position:absolute;right:-3%;bottom:-8%;width:23%;aspect-ratio:9/18;background:#0b0b0b;border:1px solid #3a3a3a;border-radius:22px;padding:6px;z-index:2;box-shadow:0 30px 70px -20px #000;animation:float 7s ease-in-out infinite}
+.phone .ps{width:100%;height:100%;background:#efefef;border-radius:17px;overflow:hidden;padding:12% 10%;display:flex;flex-direction:column;gap:7px;container-type:inline-size;color:#0a0a0a}
+.phone .ps b{font-size:11cqw;line-height:1;letter-spacing:-.04em;text-transform:uppercase;font-weight:800;margin-top:10%}
+.phone .ps u{display:block;height:5px;border-radius:3px;background:#c9c9c9;text-decoration:none}
+.phone .ps u:nth-of-type(2){width:70%}
+.phone .ps s{display:block;margin-top:auto;height:26%;border-radius:8px;background:linear-gradient(135deg,#1a1a1a,#555);text-decoration:none}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+
+/* mock shared */
+.m-nav{display:flex;align-items:center;gap:2.6em;padding:1.5em 2.8em;font-size:.62em;font-weight:500;letter-spacing:.04em}
+.m-nav b{font-weight:800;letter-spacing:.14em;font-size:1.3em;margin-right:auto;text-transform:uppercase}
+.m-btn{display:inline-block;font-size:.6em;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:1.15em 2em;border-radius:999px}
+.m-nav .m-btn{font-size:1em;padding:.9em 1.6em}
+.m-hero{flex:1;display:grid;grid-template-columns:1.25fr 1fr;gap:2em;padding:2em 2.8em 0;align-items:center}
+.m-hero small{display:block;font-size:.6em;letter-spacing:.3em;font-weight:600;opacity:.6;margin-bottom:1.4em}
+.m-hero h4{font-size:3.9em;line-height:.98;letter-spacing:-.045em;font-weight:700}
+.m-hero p{font-size:.72em;opacity:.65;max-width:26em;margin:1.5em 0 1.8em}
+.m-foot{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2em;padding:1.6em 2.8em 2.2em}
+
+/* hero screen */
+.sc-hero{background:#f0f0f0;color:#0a0a0a}
+.sc-hero .m-btn{background:#0a0a0a;color:#fff}
+.sc-hero .m-btn.o{background:transparent;color:#0a0a0a;border:1px solid #0a0a0a}
+.sc-hero .tile{border-radius:.9em;aspect-ratio:1/.9;position:relative;overflow:hidden;background:linear-gradient(140deg,#161616,#4a4a4a)}
+.sc-hero .tile:nth-child(2){background:linear-gradient(140deg,#cfcfcf,#8d8d8d)}
+.sc-hero .tile:nth-child(3){background:linear-gradient(140deg,#2a2a2a,#0d0d0d)}
+.sc-hero .tile::after{content:"";position:absolute;width:55%;aspect-ratio:1;border-radius:50%;border:1px solid rgba(255,255,255,.35);right:-12%;bottom:-18%;box-shadow:0 0 0 1.2em rgba(255,255,255,.07),0 0 0 2.6em rgba(255,255,255,.05)}
+.sc-hero .stack{position:relative;height:100%;min-height:10em}
+.sc-hero .stack>div{position:absolute;border-radius:1em}
+.sc-hero .stack .a{inset:4% 0 18% 22%;background:linear-gradient(150deg,#101010,#505050)}
+.sc-hero .stack .b{inset:30% 38% 0 0;background:#fff;box-shadow:0 1.4em 3em -1em rgba(0,0,0,.35);padding:1.2em;font-size:.6em}
+.sc-hero .stack .b i{display:block;height:.5em;background:#ddd;border-radius:.3em;margin-bottom:.7em;font-style:normal}
+.sc-hero .stack .b i:first-child{width:50%;background:#0a0a0a;height:.9em}
+.sc-hero .stack .b i:nth-child(3){width:75%}
+
+/* ticker */
+.ticker{border-block:1px solid var(--line);background:var(--bg2);overflow:hidden;padding:22px 0;white-space:nowrap}
+.ticker-track{display:inline-flex;animation:tick 38s linear infinite}
+.ticker:hover .ticker-track{animation-play-state:paused}
+.ticker span{font-size:clamp(1.1rem,2vw,1.6rem);font-weight:600;letter-spacing:-.01em;text-transform:uppercase;padding:0 36px;display:inline-flex;align-items:center;gap:72px;color:#cfcfcf}
+.ticker span::after{content:"";width:8px;height:8px;border:1px solid #777;transform:rotate(45deg)}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* ============ SECTIONS ============ */
+section{position:relative}
+.sec{padding:clamp(80px,11vw,170px) 0}
+.sec-head{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(24px,5vw,90px);align-items:end;margin-bottom:clamp(48px,6vw,90px)}
+.sec-head h2{font-size:clamp(2.1rem,5.4vw,5.6rem);margin-top:22px}
+.sec-head p{color:var(--muted);max-width:32em;justify-self:end}
+
+/* services */
+.services{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.svc{background:var(--card);padding:clamp(28px,3vw,44px);display:flex;flex-direction:column;min-height:520px;position:relative;transition:background .5s var(--ease)}
+.svc::before{content:"";position:absolute;left:0;top:0;height:2px;width:100%;background:#fff;transform:scaleX(0);transform-origin:left;transition:transform .7s var(--ease)}
+.svc:hover{background:#1c1c1c}
+.svc:hover::before{transform:scaleX(1)}
+.svc .no{font-size:.78rem;letter-spacing:.2em;color:var(--muted);display:flex;justify-content:space-between;align-items:center}
+.svc .no svg{width:22px;height:22px;transition:transform .5s var(--ease)}
+.svc:hover .no svg{transform:rotate(45deg)}
+.svc .vis{height:150px;margin:38px 0 36px;border:1px solid var(--line);border-radius:12px;background:var(--bg2);position:relative;overflow:hidden}
+.svc h3{font-size:clamp(1.5rem,2.2vw,2rem);font-weight:600;letter-spacing:-.03em;line-height:1.1;margin-bottom:16px}
+.svc p{color:var(--muted);font-size:.95rem;margin-bottom:26px}
+.svc ul{margin-top:auto;border-top:1px solid var(--line)}
+.svc li{padding:12px 0;border-bottom:1px solid var(--line);font-size:.85rem;color:#cfcfcf;display:flex;align-items:center;gap:12px}
+.svc li::before{content:"";width:5px;height:5px;background:#fff;border-radius:50%}
+/* service visuals */
+.v1 i{position:absolute;display:block;background:#2a2a2a;border-radius:4px}
+.v1 i:nth-child(1){left:8%;top:14%;width:34%;height:8px;background:#fff}
+.v1 i:nth-child(2){left:8%;top:30%;width:52%;height:8px}
+.v1 i:nth-child(3){left:8%;top:44%;width:40%;height:8px}
+.v1 i:nth-child(4){right:8%;top:14%;width:28%;height:70%;border-radius:8px;background:linear-gradient(150deg,#2f2f2f,#161616);border:1px solid #333}
+.v1 i:nth-child(5){left:8%;bottom:14%;width:22%;height:20px;border-radius:99px;background:#fff}
+.v2 .d{position:absolute;bottom:-1px;border:1px solid #3a3a3a;background:#0d0d0d;border-radius:8px 8px 0 0}
+.v2 .d1{left:7%;width:48%;height:78%}
+.v2 .d2{left:58%;width:20%;height:56%;border-radius:8px 8px 0 0}
+.v2 .d3{left:81%;width:11%;height:38%}
+.v2 .d::before{content:"";position:absolute;left:12%;top:12%;width:50%;height:5px;background:#fff;border-radius:3px}
+.v2 .d::after{content:"";position:absolute;left:12%;top:28%;width:76%;height:4px;background:#2c2c2c;border-radius:3px;box-shadow:0 10px 0 #2c2c2c,0 20px 0 #2c2c2c}
+.v3{display:flex;align-items:center;justify-content:center;gap:10px;padding:0 8%}
+.v3 span{flex:1;border:1px solid #333;border-radius:10px;height:62%;position:relative;background:#0d0d0d}
+.v3 span::before{content:"";position:absolute;left:14%;right:14%;top:18%;height:5px;background:#fff;border-radius:3px;opacity:.9}
+.v3 span::after{content:"";position:absolute;left:14%;top:44%;width:44%;height:4px;background:#333;border-radius:3px}
+.v3 span:nth-child(2){height:78%;border-color:#fff}
+.v3 span:nth-child(2)::after{background:#fff;width:60%}
+
+/* portfolio */
+.portfolio{background:var(--bg2);border-block:1px solid var(--line)}
+.notice{display:inline-flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:999px;padding:9px 18px;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#cfcfcf;margin-top:30px;background:var(--bg)}
+.notice::before{content:"";width:6px;height:6px;border-radius:50%;background:#fff}
+.proj{display:grid;grid-template-columns:minmax(0,8fr) minmax(0,4fr);gap:clamp(28px,5vw,80px);align-items:center;padding:clamp(40px,5vw,80px) 0;border-top:1px solid var(--line)}
+.proj:first-of-type{border-top:0}
+.proj.flip{grid-template-columns:minmax(0,4fr) minmax(0,8fr)}
+.proj.flip .proj-vis{order:2}
+.proj-vis{position:relative;transition:transform .8s var(--ease)}
+.proj-vis .browser{transition:transform .8s var(--ease),box-shadow .8s var(--ease)}
+.proj:hover .proj-vis .browser{transform:translateY(-10px);box-shadow:0 70px 120px -40px #000,0 0 0 1px #444}
+.badge{position:absolute;top:56px;right:16px;z-index:3;background:rgba(8,8,8,.85);backdrop-filter:blur(6px);border:1px solid #333;color:#fff;font-size:.56rem;letter-spacing:.2em;text-transform:uppercase;padding:7px 12px;border-radius:99px}
+.proj-meta .idx{font-size:.78rem;letter-spacing:.2em;color:var(--muted)}
+.proj-meta h3{font-size:clamp(2.2rem,4vw,4rem);font-weight:700;letter-spacing:-.045em;text-transform:uppercase;line-height:1;margin:18px 0 22px}
+.proj-meta p{color:var(--muted);margin-bottom:26px;max-width:28em}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+.tags span{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--line);padding:7px 14px;border-radius:99px;color:#cfcfcf}
+.demo-note{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);border-top:1px solid var(--line);padding-top:18px}
+
+/* Café */
+.cafe{background:#ededea;color:#141414}
+.cafe .m-btn{background:#141414;color:#fff}
+.cafe .m-hero h4{font-weight:600}
+.cup{position:relative;aspect-ratio:1;width:88%;justify-self:center}
+.cup span{position:absolute;border-radius:50%}
+.cup span:nth-child(1){inset:0;background:#d9d9d5;border:1px solid #c4c4c0}
+.cup span:nth-child(2){inset:14%;background:#fff;box-shadow:0 1.2em 2.4em -.8em rgba(0,0,0,.35)}
+.cup span:nth-child(3){inset:26%;background:radial-gradient(circle at 35% 30%,#555,#161616 70%)}
+.cup::after{content:"";position:absolute;right:-4%;top:42%;width:18%;height:18%;border:.55em solid #fff;border-left:0;border-radius:0 99px 99px 0;box-shadow:.2em .5em 1em -.4em rgba(0,0,0,.3)}
+.cafe .m-foot div{background:#fff;border-radius:.9em;padding:1.1em 1.3em;font-size:.72em;font-weight:600;display:flex;justify-content:space-between;align-items:flex-end;min-height:5.6em}
+.cafe .m-foot em{display:block;font-style:normal;font-weight:400;opacity:.55;font-size:.82em;margin-top:.3em}
+.cafe .m-foot b{font-weight:600;opacity:.5;font-size:.9em}
+
+/* Barber */
+.barber{background:#0b0b0b;color:#fff}
+.barber .m-btn{background:#fff;color:#0b0b0b}
+.barber .m-nav{border-bottom:1px solid #222}
+.barber .m-hero{grid-template-columns:1.35fr 1fr;padding-top:1.6em}
+.barber .m-hero h4{font-size:4.5em;font-weight:800;text-transform:uppercase;line-height:.88;letter-spacing:-.05em}
+.barber .m-hero h4 span{color:transparent;-webkit-text-stroke:1px #fff}
+.pole-wrap{display:flex;justify-content:center;height:100%;align-items:center}
+.pole{width:20%;height:92%;border-radius:99px;border:1px solid #3a3a3a;background:repeating-linear-gradient(-48deg,#f2f2f2 0 .9em,#0b0b0b .9em 1.8em,#6b6b6b 1.8em 2.7em,#0b0b0b 2.7em 3.6em);position:relative;box-shadow:0 0 0 .5em #0b0b0b,0 0 0 .6em #333}
+.barber .m-foot{grid-template-columns:repeat(4,1fr);gap:2em;border-top:1px solid #222;margin-top:1.4em}
+.barber .m-foot div{font-size:.7em;font-weight:600;display:flex;flex-direction:column;gap:.3em}
+.barber .m-foot em{font-style:normal;font-weight:400;opacity:.5;border-top:1px dotted #555;padding-top:.5em;font-size:.9em}
+
+/* Cleaning */
+.clean{background:#e6e6e6;color:#0f0f0f}
+.clean .m-btn{background:#0f0f0f;color:#fff}
+.clean .m-hero{grid-template-columns:1.2fr 1fr}
+.clean .m-hero h4{font-weight:700}
+.checks{display:grid;gap:.7em;font-size:.72em;margin-top:1.3em;font-weight:500}
+.checks span{display:flex;align-items:center;gap:.8em}
+.checks span::before{content:"";width:1.5em;height:1.5em;border-radius:50%;background:#0f0f0f url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 6.2l2 2L9 4' fill='none' stroke='white' stroke-width='1.4'/%3E%3C/svg%3E") center/70% no-repeat;flex:none}
+.qcard{background:#fff;border-radius:1.2em;padding:1.8em;box-shadow:0 2em 4em -2em rgba(0,0,0,.3)}
+.qcard b{display:block;font-size:1em;font-weight:700;margin-bottom:1.1em;letter-spacing:-.02em}
+.qcard i{display:block;height:2.5em;border-radius:.6em;background:#efefef;margin-bottom:.8em;border:1px solid #dcdcdc}
+.qcard .m-btn{display:block;text-align:center;margin-top:1em;font-size:.55em}
+.clean .m-foot div{border:1px solid #c4c4c4;border-radius:.9em;padding:1.1em 1.3em;font-size:.72em;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+.clean .m-foot div::after{content:"→";opacity:.5}
+
+/* About */
+.about-grid{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:clamp(30px,6vw,110px);align-items:start}
+.about h2{font-size:clamp(2.4rem,6.6vw,7rem);margin-top:24px}
+.about h2 .dim{color:#5a5a5a}
+.about-copy p{color:var(--muted);font-size:1.05rem;margin-bottom:22px}
+.about-copy p:first-child{color:#e8e8e8;font-size:1.25rem;line-height:1.5}
+.values{margin-top:clamp(56px,7vw,110px);display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line)}
+.val{padding:30px 28px 10px 0;border-right:1px solid var(--line);margin-right:28px}
+.val:last-child{border:0;margin:0}
+.val b{display:block;font-size:1.05rem;font-weight:600;letter-spacing:-.02em;margin-bottom:10px}
+.val span{color:var(--muted);font-size:.9rem;display:block}
+.val em{font-style:normal;font-size:.72rem;letter-spacing:.2em;color:var(--muted);display:block;margin-bottom:34px}
+
+/* Process */
+.process{background:var(--bg2);border-block:1px solid var(--line)}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative}
+.step{padding:0 clamp(18px,2.2vw,36px) 10px 0;position:relative}
+.step::before{content:"";position:absolute;top:19px;left:56px;right:0;height:1px;background:var(--line)}
+.step:last-child::before{display:none}
+.step .n{width:40px;height:40px;border-radius:50%;border:1px solid #444;display:flex;align-items:center;justify-content:center;font-size:.72rem;letter-spacing:.1em;background:var(--bg2);position:relative;z-index:1;transition:background .4s,color .4s}
+.step:hover .n{background:#fff;color:#080808}
+.step .big{font-size:clamp(4.5rem,8vw,8rem);font-weight:800;letter-spacing:-.06em;line-height:1;color:transparent;-webkit-text-stroke:1px #3a3a3a;margin:34px 0 10px;transition:-webkit-text-stroke-color .5s}
+.step:hover .big{-webkit-text-stroke-color:#fff}
+.step h3{font-size:1.5rem;font-weight:600;letter-spacing:-.03em;text-transform:uppercase;margin-bottom:12px}
+.step p{color:var(--muted);font-size:.92rem}
+
+/* Contact */
+.contact-grid{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:clamp(36px,6vw,120px);align-items:start}
+.contact h2{font-size:clamp(2.4rem,6.6vw,7rem);margin:24px 0 34px}
+.contact-note{color:var(--muted);max-width:28em}
+form{display:grid;gap:30px}
+.field{position:relative}
+.field label{display:block;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;transition:color .3s}
+.field input,.field textarea{width:100%;background:transparent;border:0;border-bottom:1px solid #3a3a3a;padding:12px 0 14px;font-size:1.05rem;outline:none;border-radius:0;transition:border-color .3s;resize:vertical}
+.field textarea{min-height:130px}
+.field input::placeholder,.field textarea::placeholder{color:#4d4d4d}
+.field:focus-within label{color:#fff}
+.field input:focus,.field textarea:focus{border-color:#fff}
+.field .err{display:none;color:#fff;font-size:.78rem;margin-top:8px}
+.field.bad input,.field.bad textarea{border-color:#fff}
+.field.bad .err{display:block}
+.hp{position:absolute;left:-9999px;opacity:0;height:0;overflow:hidden}
+.form-foot{display:flex;flex-wrap:wrap;gap:20px;align-items:center}
+.form-status{display:none;border:1px solid var(--line);background:var(--card);border-radius:14px;padding:18px 20px;font-size:.9rem;color:#dcdcdc}
+.form-status.show{display:block}
+.form-status b{display:block;color:#fff;margin-bottom:4px;font-weight:600}
+.btn[disabled]{opacity:.5;pointer-events:none}
+
+/* Footer */
+footer{border-top:1px solid var(--line);padding:clamp(56px,7vw,100px) 0 0;overflow:hidden}
+.f-grid{display:grid;grid-template-columns:2fr 1fr 1.4fr;gap:40px;padding-bottom:clamp(40px,5vw,72px)}
+.f-grid p{color:var(--muted);font-size:.92rem;max-width:26em;margin-top:22px}
+.f-grid h4{font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);font-weight:500;margin-bottom:20px}
+.f-grid li{margin-bottom:10px}
+.f-grid li a{font-size:.95rem;color:#e2e2e2;transition:color .3s,padding .4s var(--ease)}
+.f-grid li a:hover{color:#fff;padding-left:8px}
+.placeholder{display:inline-block;border:1px dashed #444;border-radius:8px;padding:8px 12px;color:var(--muted);font-size:.85rem}
+.f-word{font-size:clamp(4rem,21.5vw,22rem);font-weight:800;letter-spacing:-.06em;line-height:.78;text-align:center;color:transparent;-webkit-text-stroke:1px #2c2c2c;user-select:none;margin-bottom:-.06em;white-space:nowrap}
+.f-bottom{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;padding:24px 0;border-top:1px solid var(--line);font-size:.78rem;color:var(--muted)}
+.f-bottom a:hover{color:#fff}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:1100px){
+  .services{grid-template-columns:1fr}
+  .svc{min-height:0}
+  .svc ul{margin-top:10px}
+  .values{grid-template-columns:repeat(2,1fr)}
+  .val:nth-child(2){border-right:0;margin-right:0}
+  .val{padding-bottom:30px;border-bottom:1px solid var(--line)}
+  .val:nth-child(n+3){border-bottom:0}
+  .steps{grid-template-columns:repeat(2,1fr);row-gap:56px}
+  .step:nth-child(2)::before{display:none}
+}
+@media (max-width:900px){
+  .nav-links{display:none}
+  .burger{display:block}
+  .hero-sub,.sec-head,.about-grid,.contact-grid,.proj,.proj.flip{grid-template-columns:1fr}
+  .proj.flip .proj-vis{order:0}
+  .sec-head p{justify-self:start}
+  .hero-visual{margin-top:20px;margin-right:5%}
+  .hv-inner::before{transform:translate(12px,-12px)}
+  .f-grid{grid-template-columns:1fr 1fr}
+  .f-grid>div:first-child{grid-column:1/-1}
+}
+@media (max-width:600px){
+  .hero-meta{gap:20px;flex-wrap:wrap}
+  .btn{padding:15px 22px}
+  .hero-btns .btn{flex:1 1 100%;justify-content:center}
+  .values,.steps{grid-template-columns:1fr}
+  .val{border-right:0;margin-right:0;border-bottom:1px solid var(--line)!important}
+  .val:last-child{border-bottom:0!important}
+  .step::before{display:none}
+  .step{padding-bottom:0}
+  .step .big{margin:20px 0 6px}
+  .f-grid{grid-template-columns:1fr}
+  .badge{top:48px;right:10px;font-size:.5rem}
+  .bar .url{display:none}
+  .phone{border-radius:14px}
+  .form-foot .btn{width:100%;justify-content:center}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition-duration:.01ms!important}
+  .js .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ============ NAVIGATION ============ -->
+<header class="nav" id="nav">
+  <div class="wrap nav-in">
+    <a href="#home" class="logo" aria-label="MONTRA Web Design — home">
+      <b>MONTRA</b><small>WEB DESIGN</small>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a class="lnk" href="#home">Home</a>
+      <a class="lnk" href="#services">Services</a>
+      <a class="lnk" href="#portfolio">Portfolio</a>
+      <a class="lnk" href="#about">About</a>
+      <a class="lnk" href="#contact">Contact</a>
+      <a class="btn btn-solid" href="#contact">Start a Project</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mmenu"><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="mmenu" id="mmenu" aria-hidden="true">
+  <a class="m" href="#home"><small>01</small>Home</a>
+  <a class="m" href="#services"><small>02</small>Services</a>
+  <a class="m" href="#portfolio"><small>03</small>Portfolio</a>
+  <a class="m" href="#about"><small>04</small>About</a>
+  <a class="m" href="#contact"><small>05</small>Contact</a>
+  <a class="btn btn-solid" href="#contact">Start a Project</a>
+</div>
+
+<main id="main">
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="home">
+  <div class="wrap">
+    <span class="label reveal">Independent Web Design Studio</span>
+    <h1 class="display reveal" style="--d:.1s">We build digital experiences <span class="dim">that move businesses forward.</span></h1>
+
+    <div class="hero-sub">
+      <div class="hero-copy reveal" style="--d:.2s">
+        <p>Modern, professional websites designed to help businesses establish their online presence and make a lasting impression.</p>
+        <div class="hero-btns">
+          <a class="btn btn-solid" href="#portfolio">Explore our work
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8h11M9 3.5 13.5 8 9 12.5"/></svg></a>
+          <a class="btn btn-ghost" href="#contact">Start a project</a>
+        </div>
+        <div class="hero-meta">
+          <div><b>Design</b>Custom layouts</div>
+          <div><b>Build</b>Hand-coded</div>
+          <div><b>Support</b>Ongoing care</div>
+        </div>
+      </div>
+
+      <!-- Hero mockup -->
+      <div class="hero-visual reveal" style="--d:.3s" id="heroVisual" aria-hidden="true">
+        <div class="hv-inner" id="hvInner">
+          <div class="browser">
+            <div class="bar"><i></i><i></i><i></i><em class="url">yourbrand.com</em></div>
+            <div class="screen sc-hero">
+              <div class="s-in">
+                <div class="m-nav"><b>Your Brand</b><span>Work</span><span>Studio</span><span>Journal</span><span class="m-btn">Contact</span></div>
+                <div class="m-hero">
+                  <div>
+                    <small>EST. ONLINE</small>
+                    <h4>Design that earns attention.</h4>
+                    <p>A considered website that presents your business with clarity and confidence.</p>
+                    <span class="m-btn">Get started</span> &nbsp; <span class="m-btn o">Our work</span>
+                  </div>
+                  <div class="stack"><div class="a"></div><div class="b"><i></i><i></i><i></i></div></div>
+                </div>
+                <div class="m-foot"><div class="tile"></div><div class="tile"></div><div class="tile"></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="phone"><div class="ps"><u></u><b>Your Brand</b><u></u><u></u><s></s></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span>Website Design</span><span>Responsive Development</span><span>Website Maintenance</span><span>Considered Details</span>
+    <span>Website Design</span><span>Responsive Development</span><span>Website Maintenance</span><span>Considered Details</span>
+    <span>Website Design</span><span>Responsive Development</span><span>Website Maintenance</span><span>Considered Details</span>
+    <span>Website Design</span><span>Responsive Development</span><span>Website Maintenance</span><span>Considered Details</span>
+  </div>
+</div>
+
+<!-- ============ SERVICES ============ -->
+<section class="sec" id="services">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><span class="label reveal">Services</span><h2 class="display reveal" style="--d:.1s">What we do</h2></div>
+      <p class="reveal" style="--d:.2s">From the first layout to the day-to-day upkeep, everything your website needs is handled with the same attention to detail.</p>
+    </div>
+
+    <div class="services">
+      <article class="svc reveal">
+        <div class="no"><span>01</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 3v18M3 12h18"/></svg></div>
+        <div class="vis v1" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+        <h3>Website Design</h3>
+        <p>Custom layouts shaped around your brand, your content and your customers — designed to look distinctive and communicate clearly from the very first screen.</p>
+        <ul><li>Brand-led visual design</li><li>Page structure &amp; content layout</li><li>Typography &amp; colour direction</li></ul>
+      </article>
+
+      <article class="svc reveal" style="--d:.12s">
+        <div class="no"><span>02</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 3v18M3 12h18"/></svg></div>
+        <div class="vis v2" aria-hidden="true"><span class="d d1"></span><span class="d d2"></span><span class="d d3"></span></div>
+        <h3>Responsive Development</h3>
+        <p>Clean, hand-written code that adapts gracefully to phones, tablets and desktops, built to load quickly and to be easy to host.</p>
+        <ul><li>Mobile, tablet &amp; desktop layouts</li><li>Performance-minded code</li><li>Accessible, semantic markup</li></ul>
+      </article>
+
+      <article class="svc reveal" style="--d:.24s">
+        <div class="no"><span>03</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 3v18M3 12h18"/></svg></div>
+        <div class="vis v3" aria-hidden="true"><span></span><span></span><span></span></div>
+        <h3>Website Maintenance</h3>
+        <p>Your website should stay current as your business does. Ongoing support keeps content fresh and small issues from becoming big ones.</p>
+        <ul><li>Content &amp; image updates</li><li>Fixes &amp; improvements</li><li>Ongoing support</li></ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PORTFOLIO ============ -->
+<section class="sec portfolio" id="portfolio">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><span class="label reveal">Portfolio</span><h2 class="display reveal" style="--d:.1s">Selected concepts</h2></div>
+      <div class="reveal" style="--d:.2s; justify-self:end">
+        <p style="max-width:32em;color:var(--muted)">Three example website concepts showing the kind of design we create for local businesses.</p>
+        <span class="notice">Demonstration concepts — not real client projects</span>
+      </div>
+    </div>
+
+    <!-- Café -->
+    <article class="proj reveal">
+      <div class="proj-vis">
+        <span class="badge">Demo concept</span>
+        <div class="browser">
+          <div class="bar"><i></i><i></i><i></i><em class="url">fieldhousecafe.example</em></div>
+          <div class="screen"><div class="s-in cafe">
+            <div class="m-nav"><b>Fieldhouse</b><span>Menu</span><span>Visit</span><span>Story</span><span class="m-btn">Reserve</span></div>
+            <div class="m-hero">
+              <div><small>CAFÉ &amp; BAKERY</small><h4>Slow mornings, well made.</h4><p>Small-batch coffee, fresh bakes and a table by the window.</p><span class="m-btn">View menu</span></div>
+              <div class="cup"><span></span><span></span><span></span></div>
+            </div>
+            <div class="m-foot">
+              <div><span>Flat white<em>Espresso, steamed milk</em></span><b>01</b></div>
+              <div><span>Morning bun<em>Baked every day</em></span><b>02</b></div>
+              <div><span>Seasonal plate<em>Changes weekly</em></span><b>03</b></div>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <div class="proj-meta">
+        <span class="idx">01 — CONCEPT</span>
+        <h3>Café</h3>
+        <p>A warm, appetising site for an independent café: a clear menu, opening details and an easy way to reserve a table.</p>
+        <div class="tags"><span>Menu</span><span>Reservations</span><span>Location</span></div>
+        <div class="demo-note">Demonstration concept · Fictional business</div>
+      </div>
+    </article>
+
+    <!-- Barber -->
+    <article class="proj flip reveal">
+      <div class="proj-vis">
+        <span class="badge">Demo concept</span>
+        <div class="browser">
+          <div class="bar"><i></i><i></i><i></i><em class="url">gentrybarber.example</em></div>
+          <div class="screen"><div class="s-in barber">
+            <div class="m-nav"><b>Gentry &amp; Co.</b><span>Services</span><span>Barbers</span><span>Find us</span><span class="m-btn">Book now</span></div>
+            <div class="m-hero">
+              <div><small>BARBERSHOP</small><h4>Sharp.<br><span>Clean.</span><br>Classic.</h4></div>
+              <div class="pole-wrap"><div class="pole"></div></div>
+            </div>
+            <div class="m-foot">
+              <div>Classic cut<em>30 min</em></div>
+              <div>Skin fade<em>45 min</em></div>
+              <div>Beard trim<em>20 min</em></div>
+              <div>The full works<em>60 min</em></div>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <div class="proj-meta">
+        <span class="idx">02 — CONCEPT</span>
+        <h3>Barber</h3>
+        <p>A confident, high-contrast site with a bold identity, a clear services list and booking front and centre.</p>
+        <div class="tags"><span>Services</span><span>Online booking</span><span>Team</span></div>
+        <div class="demo-note">Demonstration concept · Fictional business</div>
+      </div>
+    </article>
+
+    <!-- Cleaning -->
+    <article class="proj reveal">
+      <div class="proj-vis">
+        <span class="badge">Demo concept</span>
+        <div class="browser">
+          <div class="bar"><i></i><i></i><i></i><em class="url">freshframe.example</em></div>
+          <div class="screen"><div class="s-in clean">
+            <div class="m-nav"><b>Fresh Frame</b><span>Services</span><span>Areas</span><span>FAQ</span><span class="m-btn">Free quote</span></div>
+            <div class="m-hero">
+              <div><small>CLEANING COMPANY</small><h4>Spotless. Every time.</h4>
+                <div class="checks"><span>Homes &amp; offices</span><span>Flexible scheduling</span><span>Eco-conscious products</span></div></div>
+              <div class="qcard"><b>Request a quote</b><i></i><i></i><span class="m-btn">Send request</span></div>
+            </div>
+            <div class="m-foot"><div>Domestic</div><div>Commercial</div><div>End of tenancy</div></div>
+          </div></div>
+        </div>
+      </div>
+      <div class="proj-meta">
+        <span class="idx">03 — CONCEPT</span>
+        <h3>Cleaning company</h3>
+        <p>A clean, trustworthy layout that explains the services simply and makes requesting a quote effortless.</p>
+        <div class="tags"><span>Services</span><span>Quote request</span><span>Service areas</span></div>
+        <div class="demo-note">Demonstration concept · Fictional business</div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section class="sec about" id="about">
+  <div class="wrap">
+    <div class="about-grid">
+      <div>
+        <span class="label reveal">About</span>
+        <h2 class="display reveal" style="--d:.1s">Good design is <span class="dim">good business.</span></h2>
+      </div>
+      <div class="about-copy reveal" style="--d:.2s">
+        <p>MONTRA WEB DESIGN is an independent studio that designs and builds modern websites for businesses that want to be taken seriously online.</p>
+        <p>For most customers, your website is the first impression. A clear, well-designed site shows people who you are, what you offer and how to get in touch — before you've said a word.</p>
+        <p>We focus on thoughtful design, clean code and straightforward communication, so your website works as hard as you do.</p>
+      </div>
+    </div>
+
+    <div class="values">
+      <div class="val reveal"><em>01</em><b>First impressions</b><span>People judge a business quickly. Good design makes that moment count.</span></div>
+      <div class="val reveal" style="--d:.08s"><em>02</em><b>Credibility</b><span>A professional website builds trust with new customers.</span></div>
+      <div class="val reveal" style="--d:.16s"><em>03</em><b>Always open</b><span>Your website represents you around the clock, on every device.</span></div>
+      <div class="val reveal" style="--d:.24s"><em>04</em><b>Room to grow</b><span>A solid foundation you can build on as your business develops.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROCESS ============ -->
+<section class="sec process" id="process">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><span class="label reveal">Process</span><h2 class="display reveal" style="--d:.1s">How we work</h2></div>
+      <p class="reveal" style="--d:.2s">A simple, transparent four-stage process, from the first conversation to a live website.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><div class="n">01</div><div class="big">01</div><h3>Discover</h3><p>We learn about your business, your audience and what you want your website to achieve.</p></div>
+      <div class="step reveal" style="--d:.1s"><div class="n">02</div><div class="big">02</div><h3>Design</h3><p>We shape the look, structure and content of your site, refining it with your feedback.</p></div>
+      <div class="step reveal" style="--d:.2s"><div class="n">03</div><div class="big">03</div><h3>Develop</h3><p>The approved design is built as a fast, responsive site that works across devices.</p></div>
+      <div class="step reveal" style="--d:.3s"><div class="n">04</div><div class="big">04</div><h3>Launch</h3><p>We test everything, take your site live and stay on hand for what comes next.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section class="sec contact" id="contact">
+  <div class="wrap">
+    <div class="contact-grid">
+      <div>
+        <span class="label reveal">Contact</span>
+        <h2 class="display reveal" style="--d:.1s">Let's create something great.</h2>
+        <p class="contact-note reveal" style="--d:.2s">Tell us a little about your business and what you have in mind. We'll take it from there.</p>
+      </div>
+
+      <!--
+        FORM NOTE: A static HTML page cannot send email by itself.
+        This form is set up for Netlify Forms (data-netlify="true"). When this file is deployed
+        to Netlify, submissions appear in your Netlify dashboard under Forms, and you can add an
+        email notification there. Opened locally (file://) or on other hosts, nothing is delivered.
+      -->
+      <form class="reveal" style="--d:.15s" id="contactForm" name="montra-contact" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+        <input type="hidden" name="form-name" value="montra-contact">
+        <p class="hp" aria-hidden="true"><label>Don't fill this in: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+
+        <div class="field"><label for="f-name">Name</label>
+          <input id="f-name" name="name" type="text" autocomplete="name" placeholder="Your full name" required>
+          <div class="err">Please enter your name.</div></div>
+
+        <div class="field"><label for="f-biz">Business name</label>
+          <input id="f-biz" name="business" type="text" autocomplete="organization" placeholder="Your business">
+        </div>
+
+        <div class="field"><label for="f-email">Email</label>
+          <input id="f-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+          <div class="err">Please enter a valid email address.</div></div>
+
+        <div class="field"><label for="f-msg">Project description</label>
+          <textarea id="f-msg" name="message" placeholder="What do you need, and what would success look like?" required></textarea>
+          <div class="err">Please tell us a little about your project.</div></div>
+
+        <div class="form-foot">
+          <button class="btn btn-solid" type="submit" id="submitBtn">Submit
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8h11M9 3.5 13.5 8 9 12.5"/></svg></button>
+        </div>
+        <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="f-grid">
+      <div>
+        <a href="#home" class="logo" aria-label="MONTRA Web Design — back to top"><b>MONTRA</b><small>WEB DESIGN</small></a>
+        <p>An independent web design studio creating modern, professional websites for businesses.</p>
+      </div>
+      <div>
+        <h4>Navigate</h4>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#portfolio">Portfolio</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <!-- Replace the placeholders below with your real details. -->
+        <p style="margin:0 0 14px"><span class="placeholder">[ Your email address ]</span></p>
+        <p style="margin:0"><span class="placeholder">[ Your phone / location ]</span></p>
+      </div>
+    </div>
+  </div>
+  <div class="f-word" aria-hidden="true">MONTRA</div>
+  <div class="wrap">
+    <div class="f-bottom">
+      <span>© <span id="year">2026</span> MONTRA WEB DESIGN. All rights reserved.</span>
+      <a href="#home">Back to top ↑</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (s, c) { return (c || document).querySelector(s); };
+  var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Year */
+  var y = $('#year'); if (y) y.textContent = new Date().getFullYear();
+
+  /* Nav scrolled state */
+  var nav = $('#nav');
+  function onScroll() { nav.classList.toggle('scrolled', window.scrollY > 20); }
+  onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
+
+  /* Mobile menu */
+  var burger = $('#burger'), mmenu = $('#mmenu');
+  function setMenu(open) {
+    burger.setAttribute('aria-expanded', String(open));
+    burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    mmenu.classList.toggle('open', open);
+    mmenu.setAttribute('aria-hidden', String(!open));
+    document.body.classList.toggle('lock', open);
+  }
+  burger.addEventListener('click', function () { setMenu(burger.getAttribute('aria-expanded') !== 'true'); });
+  $$('a', mmenu).forEach(function (a) { a.addEventListener('click', function () { setMenu(false); }); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setMenu(false); });
+  window.addEventListener('resize', function () { if (window.innerWidth > 900) setMenu(false); });
+
+  /* Reveal on scroll */
+  var rev = $$('.reveal');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    rev.forEach(function (el) { io.observe(el); });
+  } else { rev.forEach(function (el) { el.classList.add('in'); }); }
+
+  /* Active nav link */
+  var links = $$('.nav-links a.lnk');
+  var ids = ['home', 'services', 'portfolio', 'about', 'contact'];
+  function setActive() {
+    var pos = window.scrollY + window.innerHeight * 0.35, cur = 'home';
+    ids.forEach(function (id) { var el = document.getElementById(id); if (el && el.offsetTop <= pos) cur = id; });
+    links.forEach(function (a) { a.classList.toggle('active', a.getAttribute('href') === '#' + cur); });
+  }
+  setActive(); window.addEventListener('scroll', setActive, { passive: true });
+
+  /* Hero subtle tilt */
+  var hv = $('#heroVisual'), inner = $('#hvInner');
+  if (hv && inner && !reduce && window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
+    hv.addEventListener('mousemove', function (e) {
+      var r = hv.getBoundingClientRect();
+      var x = (e.clientX - r.left) / r.width - 0.5, yy = (e.clientY - r.top) / r.height - 0.5;
+      inner.style.setProperty('--ry', (x * 6).toFixed(2) + 'deg');
+      inner.style.setProperty('--rx', (-yy * 5).toFixed(2) + 'deg');
+    });
+    hv.addEventListener('mouseleave', function () { inner.style.setProperty('--ry', '0deg'); inner.style.setProperty('--rx', '0deg'); });
+  }
+
+  /* Contact form */
+  var form = $('#contactForm'), status = $('#formStatus'), btn = $('#submitBtn');
+  function showStatus(title, text) {
+    status.innerHTML = '<b></b><span></span>';
+    status.firstChild.textContent = title;
+    status.lastChild.textContent = text;
+    status.classList.add('show');
+  }
+  function valid() {
+    var ok = true;
+    $$('.field', form).forEach(function (f) {
+      var inp = $('input,textarea', f); if (!inp || !inp.required) return;
+      var v = inp.value.trim(), good = v.length > 0;
+      if (inp.type === 'email') good = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+      f.classList.toggle('bad', !good); if (!good) ok = false;
+    });
+    return ok;
+  }
+  $$('input,textarea', form).forEach(function (i) {
+    i.addEventListener('input', function () { var f = i.closest('.field'); if (f) f.classList.remove('bad'); });
+  });
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    status.classList.remove('show');
+    if (!valid()) { var b = $('.field.bad input, .field.bad textarea', form); if (b) b.focus(); return; }
+
+    var notConnected = function () {
+      showStatus('This form isn\u2019t connected to an inbox here',
+        'Static HTML can\u2019t send email on its own. Submissions are collected by Netlify Forms once this site is hosted on Netlify; opened from your computer or another host, nothing is sent.');
+    };
+    if (location.protocol === 'file:') { notConnected(); return; }
+
+    btn.setAttribute('disabled', ''); 
+    var body = new URLSearchParams(new FormData(form)).toString();
+    fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body })
+      .then(function (res) {
+        if (res.ok) { form.reset(); showStatus('Thank you', 'Your message has been sent. We\u2019ll be in touch soon.'); }
+        else { notConnected(); }
+      })
+      .catch(notConnected)
+      .then(function () { btn.removeAttribute('disabled'); });
+  });
+})();
+</script>
+</body>
+</html>
